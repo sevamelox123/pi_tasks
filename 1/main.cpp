@@ -4,16 +4,22 @@
 #include <string>
 #include <sstream>
 #include <memory>
+#include <vector>
+#include <cstring>
+#include <stdexcept>
 
 using namespace std;
 class Ground
 {
 private:
-    size_t _M,_N;
+    size_t _M = 0,_N = 0;
 
-    unique_ptr<char*[]> teto_array;
+    unique_ptr<char*[]> teto_array = nullptr;
 public:
+    Ground() = default;
     Ground(int M, int N,unique_ptr<char*[]>& teto_char);
+    Ground(const vector<vector<char>>& vec);
+    void add_element(size_t row, size_t col, char value);
 
     void cement_eater();
     void print();
@@ -49,12 +55,28 @@ int main()
     tetos.print();
     
     os << static_cast<string>(tetos);
-
     return 0;
 }
 
 Ground::Ground(int M, int N ,unique_ptr<char*[]>& teto_char) : _M(M), _N(N), teto_array(move(teto_char))
 {
+}
+
+Ground::Ground(const vector<vector<char>> &vec) : _M(vec[0].size()), _N(vec.size()) {
+    teto_array = make_unique<char*[]>(_N);
+    
+    for (size_t i = 0; i < _N; i++) {
+        teto_array[i] = new char[_M + 1];
+        copy(vec[i].begin(), vec[i].end(), teto_array[i]);
+        teto_array[i][_M] = '\0';
+    }
+}
+
+void Ground::add_element(size_t row, size_t col, char value) {
+    if (row >= _N || col >= _M) {
+        throw out_of_range("Invalid row or column index");
+    }
+    teto_array[row][col] = value;
 }
 
 void Ground::cement_eater()
