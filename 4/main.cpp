@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-// #include <map>
 
 using namespace std;
 
@@ -88,22 +87,26 @@ string depacker::depack() const
     for (std::size_t i = 0; i < teto->size(); i++)
     {
         int num;
-        if (isdigit((*teto)[i]) && !(isdigit((*teto)[i+1]) && i + 1 < teto->size()))
+        if (isdigit((*teto)[i]) && (isupper((*teto)[i+1]) && i + 2 < teto->size()))
         {
             num = (*teto)[i] - '0' - 1;
             for (size_t j = 0; j < num; j++)
             new_str += (*teto)[i+1];
         }
-        else if (isdigit((*teto)[i]) && (isdigit((*teto)[i+1]) && i + 2 < teto->size()))
+        else if (isdigit((*teto)[i]) && (isdigit((*teto)[i+1]) &&  isupper((*teto)[i+2]) &&  i + 3 < teto->size()))
         {
             num = ((*teto)[i] - '0') * 10 + ((*teto)[i+1] - '0') - 1;
             for (size_t j = 0; j < num; j++)
             new_str += (*teto)[i+2];
             i++;
         }
-        else
+        else if(isupper((*teto)[i]))
         {
             new_str += (*teto)[i];
+
+        } else{
+            new_str += '0';
+            break;
         }
     }
     return new_str;

@@ -1,3 +1,4 @@
+// 129
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -17,6 +18,11 @@ private:
 
 public:
     ChangeCounter(int _N, int _M, vector<int> _coins) : N(_N), M(_M), coins(_coins), minCoins(INT_MAX) {}
+    ChangeCounter(ChangeCounter &other);
+    ChangeCounter &operator=(ChangeCounter &other);
+    ~ChangeCounter();
+    ChangeCounter(ChangeCounter &&other);
+    ChangeCounter &operator=(ChangeCounter &&other);
     void findComb(int pos, int currentSum, int currentCoins, vector<int> &currentCombination);
     void solve();
     void printSolution(ofstream &output);
@@ -43,6 +49,58 @@ int main()
     counter.printSolution(output);
 
     return 0;
+}
+
+ChangeCounter::ChangeCounter(ChangeCounter &other) : N(other.N), M(other.M), coins(other.coins), bestCombination(other.bestCombination), minCoins(other.minCoins)
+{
+}
+
+ChangeCounter &ChangeCounter::operator=(ChangeCounter &other)
+{
+    if (this != &other)
+    {
+        N = other.N;
+        M = other.M;
+        coins = other.coins;
+        bestCombination = other.bestCombination;
+        minCoins = other.minCoins;
+    }
+    return *this;
+}
+
+ChangeCounter::~ChangeCounter()
+{
+    M = 0;
+    N = 0;
+    coins.clear();
+    bestCombination.clear();
+}
+
+ChangeCounter::ChangeCounter(ChangeCounter &&other) : M(other.M), N(other.N), coins(other.coins), bestCombination(other.bestCombination), minCoins(other.minCoins)
+{
+    other.M = 0;
+    other.N = 0;
+    other.coins.clear();
+    other.bestCombination.clear();
+    other.minCoins = 0;
+}
+
+ChangeCounter &ChangeCounter::operator=(ChangeCounter &&other)
+{
+    if (this != &other)
+    {
+        N = other.N;
+        M = other.M;
+        coins = other.coins;
+        bestCombination = other.bestCombination;
+        minCoins = other.minCoins;
+        other.M = 0;
+        other.N = 0;
+        other.coins.clear();
+        other.bestCombination.clear();
+        other.minCoins = 0;
+    }
+    return *this;
 }
 
 void ChangeCounter::findComb(int pos, int currentSum, int currentCoins, vector<int> &currentCombination)

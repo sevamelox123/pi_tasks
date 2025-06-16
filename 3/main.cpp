@@ -22,25 +22,29 @@ private:
 public:
     テトshelf(std::vector<テトBook> &r_shelf);
     テトshelf(テトshelf &other);
-    テトshelf& operator=(テトshelf& other);
+    テトshelf &operator=(テトshelf &other);
     テトshelf(テトshelf &&other);
-    テトshelf& operator=(テトshelf&& other);
+    テトshelf &operator=(テトshelf &&other);
     ~テトshelf();
 
     int take_books(int N);
     void v_print();
+    void remove(size_t pos);
+    void add(テトBook& book);
+    void add(size_t pos, テトBook& book);
 };
 
-テトshelf::テトshelf(std::vector<テトBook> &r_shelf) : shelf(r_shelf) {
+テトshelf::テトshelf(std::vector<テトBook> &r_shelf) : shelf(r_shelf)
+{
 }
 
-テトshelf::テトshelf(テトshelf &other) : shelf(other.shelf) {
-
+テトshelf::テトshelf(テトshelf &other) : shelf(other.shelf)
+{
 }
 
 テトshelf &テトshelf::operator=(テトshelf &other)
 {
-    if(this != &other)
+    if (this != &other)
     {
         shelf = other.shelf;
     }
@@ -54,7 +58,7 @@ public:
 
 テトshelf &テトshelf::operator=(テトshelf &&other)
 {
-    if(this != &other)
+    if (this != &other)
     {
         shelf = other.shelf;
         other.shelf.clear();
@@ -102,6 +106,26 @@ void テトshelf::v_print()
     {
         std::cout << "Name " << shelf[i].name << ", 番号 " << shelf[i].番号 << ", number " << shelf[i].number << std::endl;
     }
+}
+
+void テトshelf::remove(size_t pos)
+{
+    if (pos >= shelf.size())
+        return;
+    auto it = shelf.begin() + pos;
+    shelf.erase(it);
+}
+
+void テトshelf::add(テトBook& book)
+{
+    shelf.push_back(book);
+}
+
+void テトshelf::add(size_t pos, テトBook &book)
+{
+    if (pos <= shelf.size()) {
+        shelf.insert(shelf.begin() + pos, book);
+    } 
 }
 
 int main()
